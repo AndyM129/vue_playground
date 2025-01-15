@@ -5,35 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>条件判断指令</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
 </head>
 <body>
     <div id="app">
         <h2># v-if</h2>
-        <code>[i] isLoggedIn = {{isLoggedIn}}</code>
-        <p v-if="isLoggedIn==false">您好，请<a href="#" v-on:click="login">登录</a></p>
-        <p v-if="isLoggedIn==true">您好，Andy（<a href="#" v-on:click="logout">退出登录</a>）</p>
+        <code>[i] isLogin = {{isLogin}}</code>
+        <p v-if="!isLogin">您好，请<a href="javascript:void(0);" v-on:click="login">登录</a></p>
+        <p v-if="isLogin">您好，Andy（<a href="javascript:void(0);" v-on:click="logout">退出登录</a>）</p>
 
+        <h2># v-else、v-else-if</h2>
+        <code>[i] counter = {{counter}}</code> <button v-on:click="onClickCounter">点击+1</button>
+        <p v-if="counter % 4 == 0">😀 当前 counter 对 4 取余为 0</p>
+        <p v-else-if="counter % 4 == 1">😡 当前 counter 对 4 取余为 1</p>
+        <p v-else-if="counter % 4 == 2">🥶 当前 counter 对 4 取余为 2</p>
+        <p v-else="counter % 4 == 3">🤢 当前 counter 对 4 取余为 3</p>
+
+        <h2># v-show</h2>
+        <code>[i] isLogin = {{isLogin}}</code>
+        <p v-show="!isLogin">您好，请<a href="javascript:void(0);" v-on:click="login">登录</a></p>
+        <p v-show="isLogin">您好，Andy（<a href="javascript:void(0);" v-on:click="logout">退出登录</a>）</p>
+
+        <h2># v-for 循环</h2>
+        <code>[i] directions = {{directions}}</code>
+        <p>
+            方向：
+            <ul>
+                <li v-for="(direction, index) in directions">No.{{index}} {{direction}}</li>
+            </ul>
+        </p>
+        <hr style="border: none; border-top: 1px dashed lightgray;">
+        <code>[i] colors = {{colors}}</code>
+        <p style="text-align: center;">
+            <template v-for="(color, index) in colors">
+                <a href="javascript:void(0);">{{color}}</a>
+                |
+            </template>
+        </p>
+        <p>
+            更新数组：
+            <button v-on:click="onClickPushColor">push() 末尾添加1个</button>、
+            <button v-on:click="onClickPopColor">pop() 末尾删除1个</button>
+            <br/>其他还有：「shift() 开头删除1个」、「unshift() 开头添加1个」、「splice() 任意位置添加/删除」、「reverse() 反转」、「sort() 排序」
+        </p>
+
+        <h2># v-for 遍历</h2>
+        <code>[i] languages = {{languages}}</code>
+        <p> 
+            v-for="value in languages"
+            <li v-for="value in languages">{{value}}</li>
+        </p>
         
+        
+        <h2># v-for 遍历对象</h2>
+        <p>
+            v-for="(value, key) in languages":
+            <li v-for="(value, key) in languages">{{key}}: {{value}}</li>
+        </p>
+        <hr style="border: none; border-top: 1px dashed lightgray;">
+        <p>
+            v-for="(value, key, index) in languages":
+            <li v-for="(value, key, index) in languages">No.{{index}} {{key}}: {{value}}</li>
+        </p>
+
+        <h2># v-for 遍历整数</h2>
+        <p>
+            v-for="i in 5":
+            <li v-for="i in 5">No.{{i}}</li>
+        </p>
+        <hr style="border: none; border-top: 1px dashed lightgray;">
+        <p>
+            <div v-for="n in 9">
+                <span v-for="m in n" style="display: inline-block; border: 1px solid lightgray; width: 80px; text-align: center;">
+                    {{m}}*{{n}}={{m * n}}
+                </span>
+            </div>
+        </p>
+
+        <h2># key属性</h2>
+        <p>
+            请勾选喜欢的数字，或是添加数字：
+            <input type="number" size="5" width="50px" value="100" v-model="number">
+            <button v-on:click="onClickAddNumder()">添加</button>
+            <li v-for="number in numbers" :key="number">
+                <input type="checkbox" :value="number" v-bind:key="number">
+                {{number}}
+            </li>
+        </p>
+
+        <h2># 练习</h2>
+        <code>[i] words = {{words}}</code>
+        <p>
+            其中，包含字母 a 的单词有：
+            <template v-for="(word, index) in words">
+                <template v-if="word.includes('a')">
+                    <template v-if="index != 0">、</template>
+                    <span>{{word}}</span>
+                </template>
+            </template>
+        </p>
+
     </div>
     <script>
-        Vue.createApp({
+        const vm = Vue.createApp({
             data() {
                 return {
-                    isLoggedIn: false,
+                    isLogin: false,
+                    counter: 0,
+                    directions: ['left', 'center', 'right'],
+                    colors: ['red', 'green', 'blue'],
+                    languages: {
+                        'zh-CN': '中文',
+                        'en-US': '英文',
+                        'ja-JP': '日文'
+                    },
+                    numbers: [1, 2, 3, 4, 5],
+                    words: ["apple", "banana", "cherry", "date", "elderberry"],
                 }
             },
 
             methods:{
 
                 login() {
-                    this.isLoggedIn = true;
+                    this.isLogin = true;
                 },
 
                 logout() {
-                    this.isLoggedIn = false;
-                }
+                    this.isLogin = false;
+                },
 
+                onClickCounter() {
+                    this.counter += 1;
+                },
+
+                onClickPushColor() {
+                    this.colors.push('xxx');
+                },
+
+                onClickPopColor() {
+                    this.colors.pop();
+                },
+
+                onClickAddNumder() {
+                    if (this.number <= 0) return;
+                    if (this.numbers.includes(this.number)) return;
+                    this.numbers.unshift(this.number);
+                }
             }
         }).mount('#app');
     </script>
