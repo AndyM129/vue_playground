@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h2># 计算属性</h2>
+        <code>[i] name = {{name}}</code>
+        <p>优化前：姓 {{name.split(" ")[1]}}，名 {{name.split(" ")[0]}}</p>
+        <p>优化后：姓 {{lastName}}，名 {{firstName}}</p>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    name: 'Andy Meng',
+                }
+            },
+
+            computed: {
+                lastName() {
+                    return this.name.split(" ")[1];
+                },
+                firstName() {
+                    return this.name.split(" ")[0];
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
