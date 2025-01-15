@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条件判断指令</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <h2># v-if</h2>
+        <code>[i] isLoggedIn = {{isLoggedIn}}</code>
+        <p v-if="isLoggedIn==false">您好，请<a href="#" v-on:click="login">登录</a></p>
+        <p v-if="isLoggedIn==true">您好，Andy（<a href="#" v-on:click="logout">退出登录</a>）</p>
+
+        
+    </div>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    isLoggedIn: false,
+                }
+            },
+
+            methods:{
+
+                login() {
+                    this.isLoggedIn = true;
+                },
+
+                logout() {
+                    this.isLoggedIn = false;
+                }
+
+            }
+        }).mount('#app');
+    </script>
+
+
+</body>
+</html>
