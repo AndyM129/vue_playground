@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>获取电影信息</title>
+</head>
+<body>
+    <script>
+        class Movie {
+
+            constructor(title, type, director, actors) {
+                this.title = title;
+                this.type = type;
+                this.director = director;
+                this.actors = actors;
+            }
+
+            show() {
+                document.write(`中文名：${this.title}`)
+                document.write(`<br>`)
+                document.write(`类型：${this.type}`)
+                document.write(`<br>`)
+                document.write(`导演：${this.director}`)
+                document.write(`<br>`)
+                document.write(`主演：${this.actors}`)
+            }
+
+        }
+
+        let movie = new Movie("肖申克的救赎", "剧情", "弗兰克·德拉邦特", "蒂姆·罗宾斯、摩根·弗里曼、鲍勃·冈顿")
+        movie.show()
+    </script>
+</body>
+</html>

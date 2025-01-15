@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue实例与数据绑定</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .bg_gray {
+            background-color: gray;
+            color: white;
+        }
+
+        .practice1_img {
+            border: 1px solid gray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2># 文本插值</h2>
+        <p>message: {{message}}</p>
+        <p>timestamp: {{timestamp}}</p>
+        <p>html_str: {{html_str}}</p>
+        <p>getName() : {{getName()}}</p>
+
+        <h2># 单次插值</h2>
+        <p v-once>timestamp: {{timestamp}}</p>
+                
+        <h2># 跳过该元素 及其子元素的编译</h2>
+        <p v-pre>html_str: {{html_str}}</p>
+
+        <h2># 插入HTML</h2>
+        <p v-html="html_str"></p>
+
+        <h2># 绑定属性</h2>
+        <p v-bind:class="p_class">这是一段文本：应用 p_class 指定的样式（.{{p_class}}）</p>
+        <p v-bind:class="{bg_gray:p_bool}">这是一段文本：当且仅当 p_bool 为 true 时，应用 .bg_gray 样式，当前 p_bool={{p_bool}}</p>
+        <p :class="p_class">这是一段文本：通过简写形式 实现 v-bind 指令，应用 p_class 指定的样式（.{{p_class}}） </p>
+
+        <h2># 使用表达式</h2>
+        <p>QQ 邮箱：{{qq_email}}，其中的 QQ号为 {{qq_email.split('@')[0]}}</p>
+
+        <h2># 修饰符</h2>
+        已点击次数：<input type="button" :value="counter" v-on:click="onClickCounter"></input>
+
+        <h2># 修饰符 练习1</h2>
+        <img :src="practice1.img.src" :alt="practice1.img.alt" :class="practice1.img.class">
+
+        <h2># 练习2</h2>
+        <p>今天是：{{ new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'long' }) }}</p>
+
+        <h2># 练习3</h2>
+        <p>绕口令：{{practice3.text}}</p>
+        <p>其中出现了 {{ countOccurrences(practice3.text, practice3.keywords) }} 次 "{{practice3.keywords}}"</p>
+
+    </div>
+
+    <script>
+        const vm = Vue.createApp({
+
+            // 数据
+            data() {
+                return {
+                    message: 'Hello Vue!',
+                    timestamp: new Date(),
+                    html_str: 'Hello <b>Vue</b> !',
+                    p_class: 'bg_gray',
+                    p_bool: true,
+                    qq_email: '1234567890@qq.com',
+                    counter: 0,
+                    practice1: {
+                        img: {
+                            src: "https://p26-passport.byteacctimg.com/img/user-avatar/58a17484fc7d2e89a9086aa9239c2426~40x40.awebp",
+                            alt: "头像",
+                            class: "practice1_img"
+                        }
+                    },
+                    practice3: {
+                        text: "扁担宽，板凳长，板凳没有扁担长，扁担没有板凳宽",
+                        keywords: "扁担",
+                    },
+                }
+            },
+
+            // 定义方法
+            methods: {
+                
+                getName() {
+                    return 'Andy'
+                },
+
+                onClickCounter() {
+                    this.counter++;
+                },
+
+                countOccurrences(text, keyword) {
+                    let count = 0;
+                    let index = text.indexOf(keyword);
+                    while (index !== -1) {
+                        count++;
+                        index = text.indexOf(keyword, index + 1);
+                    }
+                    return count;
+                }
+            }
+        }).mount('#app')
+
+        // 每秒更新一次
+        setInterval(() => {
+            vm.timestamp = new Date();
+        }, 1000);
+    </script>
+</body>
+</html>

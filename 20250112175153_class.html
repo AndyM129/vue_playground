@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Class</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <script>        
+        class Actor {
+
+            constructor(name, job, works, achieves) {
+                this.name = name;
+                this.job = job;
+                this.works = works;
+                this.achieves = achieves;
+            }
+
+            desc() {
+                document.write(`
+                <ul>
+                    <li>中文名:${this.name}</li>
+                    <li>职业:${this.job}</li>
+                    <li>代表作:${this.name}</li>
+                    <li>主要成就:${this.achieves}</li>
+                </ul>
+                `)
+            }
+
+        }
+
+        let actor = new Actor("沈腾", "演员", "夏洛特烦恼", "电影票房xx亿");
+        actor.desc()
+    </script>
+</body>
+</html>

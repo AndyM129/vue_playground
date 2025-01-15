@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Vue.js</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{message1}}</h1>
+        <h1>{{message2}}</h1>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue
+        
+        createApp({
+            setup() {
+                const message1 = ref('① Hello Vue.js !')
+                return {
+                    message1
+                }
+            },
+            data() {
+                return {
+                    message2: '② Hello Vue.js !'
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

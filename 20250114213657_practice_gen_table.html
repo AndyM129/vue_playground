@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>输出指定行数、列数的表格</title>
+</head>
+<body>
+    
+    <script>
+        class Table {
+
+            // 构造函数
+            constructor(rows, cols) {
+                this.cols = cols;
+                this.rows = rows;
+            }
+
+            // 生成表格
+            genTable() {                
+                document.write(`<table border="1" style="border-collapse: collapse;" width=100%>`)
+                for (let row = 0; row < this.rows; row++) {
+                    document.write(`<tr>`)
+                    for (let col = 0; col < this.cols; col++) {
+                        document.write(`<td>第${row}行，第${col}列</td>`)
+                    }
+                    document.write(`</tr>`)
+                }
+                document.write(`</table>`)
+            }
+
+        }
+
+        let table = new Table(5, 6)
+        table.genTable()
+    </script>
+
+</body>
+</html>
