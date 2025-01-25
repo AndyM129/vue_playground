@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- https://www.michaelmickelson.com/js-snackbar/ -->
+    <link rel="stylesheet" href="https://www.michaelmickelson.com/js-snackbar/dist/js-snackbar.css?v=1.4">
+    <script src="https://www.michaelmickelson.com/js-snackbar/dist/js-snackbar.js?v=1.4"></script>
+</head>
+<body>
+    <div id="app">
+        <h2>## 监听事件</h2>
+
+        <h3>使用 v-on 指令：</h3>
+        <button v-on:click="login">去登录 1</button>
+        
+        <h3>改为简写形式 “@”：</h3>
+        <button @click="login">去登录 2</button>
+        
+        <h3>练习：</h3>
+        <code>[i] fontSize = {{fontSize}}</code> &nbsp;
+        <button @click="fontSize--">-1</button> &nbsp;
+        <button @click="fontSize++">+1</button>
+        <p v-bind:style="{fontSize: fontSize + 'px'}">点击按钮以调整字体大小</p>
+
+        <h2>## 事件处理方法</h2>
+        
+        <h3>使用事件对象：</h3>
+        <button @click="login_3">去登录 3</button>
+
+        <h3>使用内联语句：</h3>
+        <button @click="login_5('Andy')">去登录 5</button>
+
+        <h3>在内联语句中 获取原生 DOM 事件对象：</h3>
+        <a href="/" @click="login_6('Andy', $event)">去登录 6</a>        
+
+        <h2>## 修饰符的使用</h2>
+
+        <h3>事件修饰符</h3>
+
+        <h3>按键修饰符</h3>
+        <input type="text" @keyup.enter="keyup($event)"> (输入后 回车试试~)
+
+        <h3>练习：二级联动菜单</h3>
+        <select v-model="e1.selectedOptionIndex" style="width: 60px;">
+            <option v-for="(option, index) in e1.options" :value="index">{{option.title}}</option>
+        </select>
+        <select v-model="e1.selectedSubOptionIndex" style="width: 60px;">
+            <option v-for="(subOption, index) in e1.options[e1.selectedOptionIndex].subOptions" :value="index">{{subOption}}</option>
+        </select>
+
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    count: 0,
+                    fontSize: 16,
+                    e1: {
+                        options: [
+                            {
+                                title: "数字",
+                                subOptions: [
+                                    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+                                ],
+                            },
+                            {
+                                title: "字母",
+                                subOptions: [
+                                    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                                ],
+                            }
+                        ],
+                        selectedOptionIndex: 0,
+                        selectedSubOptionIndex: 0,
+                    },
+                }
+            },
+            watch: {
+                e1: {
+                    handler(newValue) {
+                        SnackBar({
+                            position: "tr",
+                            status: "Info",
+                            timeout: 2000, // ms
+                            message: `
+                                selectedOptionIndex = ${this.e1.selectedOptionIndex} (${this.e1.options[this.e1.selectedOptionIndex].title})
+                                selectedSubOptionIndex = ${this.e1.selectedSubOptionIndex} (${this.e1.options[this.e1.selectedOptionIndex].subOptions[this.e1.selectedSubOptionIndex]})
+                            `,
+                        });
+                    },
+                    deep: true,
+                }
+            },
+
+            methods: {
+                login() {
+                    SnackBar({
+                        position: "tr",
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: "去登录",
+                    })
+                },
+                login_3(event) {
+                    SnackBar({
+                        position: "tr",
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: `${event.target.tagName}: ${event.target.innerText}`,
+                    })
+                },
+                login_5(name) {
+                    SnackBar({
+                        position: "tr",
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: `你好，${name}`,
+                    })
+                },
+                login_6(name, e) {
+                    e.preventDefault();
+                    SnackBar({
+                        position: "tr",
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: `${event.target.innerText}：你好，${name}`,
+                    });
+                },
+                keyup(e) {
+                    SnackBar({
+                        position: "tr",
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: `${event.target.tagName}：${event.target.value}`,
+                    });
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

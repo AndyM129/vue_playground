@@ -13,6 +13,7 @@ Vue.js related practices and demos:
 - [20250115221946_property.html](./20250115221946_property.html)
 - [20250120220750_property_watch.html](./20250120220750_property_watch.html)
 - [20250123201200_bind_css_style.html](./20250123201200_bind_css_style.html)
+- [20250125210628_events.html](./20250125210628_events.html)
 
 
 
