@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元素样式绑定</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .e1_bg_highlight {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2># class 绑定：实现表格隔行换色</h2>
+        <h3>对象语法：</h3>
+        <table border="1" style="border-collapse: collapse;" width=100%>
+            <tr v-for="row in 5" v-bind:class="{e1_bg_highlight: row % 2 == 1}">
+                <td>第{{row}}行</td>
+            </tr>
+        </table>
+        <h3>数组语法：使用条件运算符</h3>
+        <table border="1" style="border-collapse: collapse;" width=100%>
+            <tr v-for="row in 5" v-bind:class="[row % 2 == 1 ? 'e1_bg_highlight' : '']">
+                <td>第{{row}}行</td>
+            </tr>
+        </table>
+
+        <h2>#style 绑定</h2>
+        <h3>对象语法 - 内联绑定：</h3>
+        <code>[i] redColor = {{redColor}}</code>
+        <p v-bind:style="{color: redColor}">示例文本</p>
+        <h3>对象语法 - 非内联绑定：</h3>
+        <code>[i] styleObject = {{styleObject}}</code>
+        <p v-bind:style="styleObject">示例文本</p>
+        <h3>数组语法 - 直接在元素中绑定样式对象：</h3>
+        <p v-bind:style="[{color: 'blue'}, {fontSize: '20px'}]">示例文本</p>
+        <h3>数组语法 - 将样式对象数组定义在 data 选项中：</h3>
+        <code>[i] styleObjects = {{styleObjects}}</code>
+        <p v-bind:style="styleObjects">示例文本</p>
+        <h3>数组语法 - 以对象数组的形式进行绑定：</h3>
+        <p v-bind:style="[styleObject, styleObjects]">示例文本</p>
+        <h3>练习 1：</h3>
+        <p v-bind:style="e1Style">示例文本</p>
+
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    redColor: 'red',
+                    styleObject: {
+                        color: 'orange',
+                        fontSize: '16px',
+                    },
+                    styleObjects: [
+                        {
+                            'font-weight': 'bold',
+                        },
+                        {
+                            color: 'purple',
+                        },
+                    ],
+                    e1Style: {
+                        color: 'orange',
+                        fontSize: '50px',
+                        fontWeight: 'bold',
+                        textShadow: '4px 2px 0px red',
+                    }
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

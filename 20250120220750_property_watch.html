@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监听属性</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h2># 监听属性</h2>
+        <code>[i] number = {{number}}</code><br/>
+        <code>[i] numberWatcher = {{numberWatcher}}</code><br />
+        <button v-on:click="onClickNumber">更新 number</button>
+
+        <h2># 监听属性 - 自动结算</h2>
+        <label for="unitPrice" >单价：</label>
+        <input id="unitPrice" type="number" step="0.01" v-model="unitPrice"> 元
+        <br>
+        <label for="count">数量：</label>
+        <input id="count" type="number" v-model="count"> 个
+        <br>
+        <p>合计：{{totalPrice.toFixed(2)}} 元</p>
+
+        <h2># 监听对象</h2>
+        <label for="bill.unitPrice">单价：</label>
+        <input type="number" step="0.01" v-model="bill.unitPrice"> 元
+        <br>
+        <label for="bill.count">数量：</label>
+        <input id="bill.count" type="number" v-model="bill.count"> 个
+        <br>
+        <p>合计：{{bill.totalPrice.toFixed(2)}} 元</p>
+
+        <h2># 练习：长度转换</h2>
+        <input type="number" step="0.01" v-model="length_m"> 米 <br />
+        <input type="number" step="0.01" v-model="length_dm"> 分米 <br />
+        <input type="number" step="0.01" v-model="length_cm"> 厘米 <br />
+
+        <h2># 练习：统计购物车中商品总价</h2>
+        <table border="1" style="border-collapse: collapse;" width=400px>
+            <caption style="text-align: left; color: gray; font-size: 0.7em;">PS：可点击数量进行修改</caption>
+            <thead>
+                <tr>
+                    <th>商品名称</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>小计</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item, index) in bill2.items" :key="item">
+                    <td align="center">{{item.name}}</td>
+                    <td align="center">{{item.unitPrice.toFixed(2)}}</td>
+                    <td align="center"><input type="number" v-model="item.count" style="border: 0; width: 90%; text-align: center;"></td>
+                    <td align="center">{{item.sumPrice.toFixed(2)}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" align="right" style="padding: 10px;">合计：{{bill2.totalPrice.toFixed(2)}}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                   number: 0,
+                   numberWatcher: '',
+                   unitPrice: 1.50,
+                   count: 1,
+                   totalPrice: 1.50,
+                   bill: {
+                       unitPrice: 1.50,
+                       count: 1,
+                       totalPrice: 1.50,
+                   },
+                   length_m: 0,
+                   length_dm: 0,
+                   length_cm: 0,
+                   bill2: {
+                        items: [
+                            {
+                                name: '商品1',
+                                unitPrice: 1.50,
+                                count: 0,
+                                sumPrice: 0.00,
+                            },
+                            {
+                                name: '商品2',
+                                unitPrice: 2.00,
+                                count: 0,
+                                sumPrice: 0.00,
+                            },
+                        ],
+                        totalPrice: 0.00,
+                   },
+                }
+            },
+
+            watch: {
+                number(newValue, oldValue) {
+                    this.numberWatcher = `number 的值从 ${oldValue} 变为 ${newValue}`;
+                },
+                unitPrice(newValue, oldValue) {
+                    this.totalPrice = this.unitPrice * this.count;
+                },
+                count(newValue, oldValue) {
+                    this.totalPrice = this.unitPrice * this.count;
+                },
+                bill: {
+                    handler(newValue) { // 监听对象时，新值、旧值 是相等的，因为这两个形参都是 bill 对象
+                        this.bill.totalPrice = this.bill.unitPrice * this.bill.count;
+                    },
+                    deep: true,
+                },
+                length_m(newValue, oldValue) {
+                    this.length_dm = this.length_m * 10;
+                    this.length_cm = this.length_m * 100;
+                },
+                length_dm(newValue, oldValue) {
+                    this.length_m = this.length_dm / 10;
+                    this.length_cm = this.length_dm * 10;
+                },
+                length_cm(newValue, oldValue) {
+                    this.length_m = this.length_cm / 100;
+                    this.length_dm = this.length_cm / 10;
+                },
+                bill2: {
+                    handler(newValue) {
+                        totalPrice = 0;
+                        for (let i = 0; i < newValue.items.length; i++) {
+                            newValue.items[i].sumPrice = newValue.items[i].unitPrice * newValue.items[i].count;
+                            totalPrice += newValue.items[i].sumPrice;
+                        }
+                        newValue.totalPrice = totalPrice;
+                    },
+                    deep: true,
+                }
+            },
+
+            computed: {
+                // length_m() {
+                //     return this.length_cm.toFixed(2);
+                // },
+                // length_dm() {
+                //     return this.length_cm.toFixed(2);
+                // },
+                // length_cm() {
+                //     return this.length_cm.toFixed(2);
+                // }
+            },
+
+            methods: {
+                onClickNumber() {
+                    this.number++;
+                }
+            }
+        }).mount('#app');
+
+        // 初始化数据
+        app.bill2.items[0].count = 1;
+        app.bill2.items[1].count = 2;
+    </script>
+</body>
+
+</html>

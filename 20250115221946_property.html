@@ -12,21 +12,47 @@
         <code>[i] name = {{name}}</code>
         <p>优化前：姓 {{name.split(" ")[1]}}，名 {{name.split(" ")[0]}}</p>
         <p>优化后：姓 {{lastName}}，名 {{firstName}}</p>
+
+        <h2># 计算属性 - 自定义实现 getter、setter</h2>
+        <code>[i] anotherFirstName = {{anotherFirstName}}</code><br/>
+        <code>[i] anotherLastName = {{anotherLastName}}</code>
+        <p>Another's Fullname：{{anotherFullName}}</p>
+        <button v-on:click="onClickSetAnotherFullName">修改 anotherFullName </button>
+
+
     </div>
     <script>
         const app = Vue.createApp({
             data() {
                 return {
                     name: 'Andy Meng',
+                    anotherFirstName: 'Bob',
+                    anotherLastName: 'Li',
                 }
             },
 
             computed: {
+                firstName() {
+                    return this.name.split(" ")[0];
+                },
                 lastName() {
                     return this.name.split(" ")[1];
                 },
-                firstName() {
-                    return this.name.split(" ")[0];
+                anotherFullName: {
+                    get() {
+                        return this.anotherFirstName + ' ' + this.anotherLastName;
+                    },
+                    set(value) {
+                        const names = value.split(' ');
+                        this.anotherFirstName = names[0];
+                        this.anotherLastName = names[1];
+                    }
+                }
+            },
+
+            methods: {
+                onClickSetAnotherFullName() {
+                    this.anotherFullName = 'Andy Meng';
                 }
             }
         }).mount('#app');
