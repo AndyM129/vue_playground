@@ -7,6 +7,24 @@
     <title>表单元素绑定</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
+        body {
+            counter-reset: section;
+        }
+
+        h1 {
+            counter-reset: subsection;
+        }
+
+        h1:before {
+            counter-increment: section;
+            content: "# " counter(section) "、";
+        }
+
+        h2:before {
+            counter-increment: subsection;
+            content: "## " counter(section) "." counter(subsection) "、";
+        }
+
         code {
             display: block;
             margin: 10px 0;
@@ -25,32 +43,32 @@
 
 <body>
     <div id="app">
-        <h2># 文本框绑定</h2>
+        <h1>文本框绑定</h1>
 
-        <h3>## 输入框</h3>
+        <h2>输入框</h2>
         <input type="text" v-model="e1.text" style="width: 300px" />
         <code>e1.text = {{e1.text}}</code>
 
-        <h3>## 文本域</h3>
+        <h2>文本域</h2>
         <textarea v-model="e2.text" style="width: 300px; height: 50px"></textarea>
         <span style="font-size: 10px">（已输入{{e2.text.length}}字）</span>
         <code style="white-space: pre">e2.text = {{e2.text}}</code>
 
-        <h3>## 练习：模拟自动取票机取票</h3>
+        <h2>练习：模拟自动取票机取票</h2>
         <input type="text" v-model="e3.text" style="width: 300px" />
         <input type="button" value="取票" style="margin-left: 10px" v-on:click="e3_onSubmit" />
         <p v-bind:style="e3.tipsStyle">{{e3.tips}}</p>
 
-        <h3>## 练习：限制用户输入字数</h3>
+        <h2>练习：限制用户输入字数</h2>
         <textarea v-model="e4.text" style="width: 300px;"></textarea>
         <span style="color: gray; font-size: 0.7em; text-align: right; display: block; width: 300px;">还能输入{{e4.max - e4.text.length}}字</span>
 
-        <h2># 复选框绑定</h2>
-        <h3>## 单个复选框</h3>
+        <h1>复选框绑定</h1>
+        <h2>单个复选框</h2>
         <input type="checkbox" id="e5" v-model="e5.checked">
         <label for="e5">checked = {{e5.checked}}</label>
 
-        <h3>## 多个复选框</h3>
+        <h2>多个复选框</h2>
         <template v-for="option in e6.options">
             <input type="checkbox" :id="option" v-model="e6.selected" :value="option">
             <label :for="option">{{option}}</label>
@@ -58,7 +76,7 @@
         </template>
         <code>e6.selected = {{e6.selected}}</code>
 
-        <h2># 单选按钮绑定</h2>
+        <h1>单选按钮绑定</h1>
         <template v-for="option in e7.options">
             <input type="radio" :id="option" v-model="e7.selected" :value="option">
             <label :for="option">{{option}}</label>
@@ -66,10 +84,10 @@
         </template>
         <code>e7.selected = {{e7.selected}}</code>
 
-        <h2># 下拉列表框绑定</h2>
+        <h1>下拉列表框绑定</h1>
 
         <section id="e8">
-            <h3>## 单选下拉列表框</h3>
+            <h2>单选下拉列表框</h2>
             <select v-model="e8.selected" v-on:change="e8_onChangeSelected">
                 <option v-for="option in e8.options" :value="option">
                     {{option}}
@@ -79,7 +97,7 @@
         </section>
 
         <section id="e9">
-            <h3>## 多选下拉列表框</h3>
+            <h2>多选下拉列表框</h2>
             <select v-model="e9.selected" multiple="multiple" size="6" v-on:change="e9_onChangeSelected">
                 <option v-for="option in e9.options" :value="option">
                     {{option}}
@@ -87,6 +105,55 @@
             </select>
             <code>e9.selected = {{e9.selected}}</code>
         </section>
+
+        <h1>值绑定</h1>
+
+        <h2 id="e10">单选按钮</h2>
+        <input type="radio" id="e10.options.key1" :value="e10.options.key1" v-model="e10.selected">
+        <label for="e10.options.key1">{{e10.options.key1}}</label>
+        &nbsp;
+        <input type="radio" id="e10.options.key2" :value="e10.options.key2" v-model="e10.selected">
+        <label for="e10.options.key2">{{e10.options.key2}}</label>
+        <code>e10.selected = {{e10.selected}}</code>
+
+        <h2 id="e11">复选框</h2>
+        <p>
+            仅绑定 true、false：
+            <input type="checkbox" v-model="e11.selected">
+        </p>
+        <p>
+            指定绑定的值：
+            <input type="checkbox" v-model="e11.selected" :true-value="e11.value0" :false-value="e11.value1">
+        </p>
+        <code>e11.selected = {{e11.selected}}</code>
+
+        <h2>单选下拉列表框</h2>
+        <select v-model="e8.selected" v-on:change="e8_onChangeSelected">
+            <option v-for="option in e8.options" :value="option">
+                {{option}}
+            </option>
+        </select>
+        <code>e8.selected = {{e8.selected}}</code>
+
+        <h1>修饰符的使用</h1>
+        
+        <h2>lazy</h2>
+        <label>输入后 绑定值 实时同步：</label>
+        <input type="text" v-model="e12.text" style="width: 400px;">
+        <br/>
+        <label>输入后，仅当触发输入框 change 事件时，绑定值 才会更新：</label>
+        <input type="text" v-model.lazy="e12.text" style="width: 400px;">
+        <code>e12.text = {{e12.text}}</code>
+
+        <h2>number</h2>
+        <label>请输入数字：（会将输入 直接转为数字 传给绑定的值上）</label>
+        <input type="text" v-model.number="e13.text" style="width: 400px;">
+        <code>e13.text = {{e13.text}}</code>
+
+        <h2>trim</h2>
+        <label>请输入内容：（会将输入 去除首尾空格 传给绑定的值上）</label>
+        <input type="text" v-model.trim="e14.text" style="width: 400px;">
+        <code>e14.text = {{e14.text}}</code>
 
     </div>
 
@@ -129,6 +196,27 @@
                         options: ["选项9-1", "选项9-2", "选项9-3", "选项9-4", "选项9-5"],
                         selected: [],
                     },
+                    e10: {
+                        options: {
+                            key1: "value1",
+                            key2: "value2",
+                        },
+                        selected: undefined,
+                    },
+                    e11: {
+                        value0: "未选中",
+                        value1: "已选中",
+                        selected: undefined,
+                    },
+                    e12: {
+                        text: "",
+                    },
+                    e13: {
+                        text: "",
+                    },
+                     e14: {
+                        text: "",
+                    }
                 };
             },
 
