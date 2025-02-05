@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>表单元素绑定</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        code {
+            display: block;
+            margin: 10px 0;
+            color: gray;
+        }
+
+        code::before {
+            content: "＞ ";
+            font-weight: bold;
+        }
+    </style>
+    <!-- https://www.michaelmickelson.com/js-snackbar/ -->
+    <link rel="stylesheet" href="https://www.michaelmickelson.com/js-snackbar/dist/js-snackbar.css?v=1.4">
+    <script src="https://www.michaelmickelson.com/js-snackbar/dist/js-snackbar.js?v=1.4"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h2># 文本框绑定</h2>
+
+        <h3>## 输入框</h3>
+        <input type="text" v-model="e1.text" style="width: 300px" />
+        <code>e1.text = {{e1.text}}</code>
+
+        <h3>## 文本域</h3>
+        <textarea v-model="e2.text" style="width: 300px; height: 50px"></textarea>
+        <span style="font-size: 10px">（已输入{{e2.text.length}}字）</span>
+        <code style="white-space: pre">e2.text = {{e2.text}}</code>
+
+        <h3>## 练习：模拟自动取票机取票</h3>
+        <input type="text" v-model="e3.text" style="width: 300px" />
+        <input type="button" value="取票" style="margin-left: 10px" v-on:click="e3_onSubmit" />
+        <p v-bind:style="e3.tipsStyle">{{e3.tips}}</p>
+
+        <h3>## 练习：限制用户输入字数</h3>
+        <textarea v-model="e4.text" style="width: 300px;"></textarea>
+        <span style="color: gray; font-size: 0.7em; text-align: right; display: block; width: 300px;">还能输入{{e4.max - e4.text.length}}字</span>
+
+        <h2># 复选框绑定</h2>
+        <h3>## 单个复选框</h3>
+        <input type="checkbox" id="e5" v-model="e5.checked">
+        <label for="e5">checked = {{e5.checked}}</label>
+
+        <h3>## 多个复选框</h3>
+        <template v-for="option in e6.options">
+            <input type="checkbox" :id="option" v-model="e6.selected" :value="option">
+            <label :for="option">{{option}}</label>
+            <span style="margin-right: 10px;"></span>
+        </template>
+        <code>e6.selected = {{e6.selected}}</code>
+
+        <h2># 单选按钮绑定</h2>
+        <template v-for="option in e7.options">
+            <input type="radio" :id="option" v-model="e7.selected" :value="option">
+            <label :for="option">{{option}}</label>
+            <span style="margin-right: 10px;"></span>
+        </template>
+        <code>e7.selected = {{e7.selected}}</code>
+
+        <h2># 下拉列表框绑定</h2>
+
+        <section id="e8">
+            <h3>## 单选下拉列表框</h3>
+            <select v-model="e8.selected" v-on:change="e8_onChangeSelected">
+                <option v-for="option in e8.options" :value="option">
+                    {{option}}
+                </option>
+            </select>
+            <code>e8.selected = {{e8.selected}}</code>
+        </section>
+
+        <section id="e9">
+            <h3>## 多选下拉列表框</h3>
+            <select v-model="e9.selected" multiple="multiple" size="6" v-on:change="e9_onChangeSelected">
+                <option v-for="option in e9.options" :value="option">
+                    {{option}}
+                </option>
+            </select>
+            <code>e9.selected = {{e9.selected}}</code>
+        </section>
+
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    e1: {
+                        text: "Hello World",
+                    },
+                    e2: {
+                        text: "Hello World",
+                    },
+                    e3: {
+                        code: "987654321",
+                        text: "",
+                        tips: "",
+                        tipsStyle: {},
+                    },
+                    e4: {
+                        max: 100,
+                        text: "",
+                    },
+                    e5: {
+                        checked: false,
+                    },
+                    e6: {
+                        options: ["选项6-1", "选项6-2", "选项6-3", "选项6-4", "选项6-5"],
+                        selected: [],
+                    },
+                    e7: {
+                        options: ["选项7-1", "选项7-2", "选项7-3", "选项7-4", "选项7-5"],
+                        selected: undefined,
+                    },
+                    e8: {
+                        options: ["选项8-1", "选项8-2", "选项8-3", "选项8-4", "选项8-5"],
+                        selected: undefined,
+                    },
+                    e9: {
+                        options: ["选项9-1", "选项9-2", "选项9-3", "选项9-4", "选项9-5"],
+                        selected: [],
+                    },
+                };
+            },
+
+            computed: {},
+
+            methods: {
+                e3_onSubmit() {
+                    if (this.e3.text == "") {
+                        this.e3.tips = "请输入您的取票码！";
+                        this.e3.tipsStyle.color = "#F5BF4F";
+                        return;
+                    }
+                    if (this.e3.text != this.e3.code) {
+                        this.e3.tips = "输入的取票码无效！";
+                        this.e3.tipsStyle.color = "#ED6A5E";
+                        return;
+                    }
+                    this.e3.tips = "恭喜您，成功取票！";
+                    this.e3.tipsStyle.color = "#61C654";
+                },
+                e8_onChangeSelected() {
+                    SnackBar({
+                        fixed: true,
+                        status: "Info",
+                        timeout: 2000, // ms
+                        message: `e8.selected = ${this.e8.selected}`,
+                    });
+                }
+            },
+        }).mount("#app");
+    </script>
+</body>
+
+</html>
